@@ -27,8 +27,14 @@ jobs:
       - name: Build Backend Image
         run: docker build -t spring-app ./springboot/app
 
+      - name: Tag Backend Image
+        run: docker tag spring-app ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
+
       - name: Build Frontend Image
         run: docker build -t angular-app ./angular-app
+
+      - name: Tag Frontend Image
+        run: docker tag angular-app ${{ secrets.DOCKERHUB_USERNAME }}/angular-app
 
       - name: Push Backend Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
