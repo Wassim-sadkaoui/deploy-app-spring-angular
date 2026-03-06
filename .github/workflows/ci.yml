@@ -36,6 +36,11 @@ jobs:
       - name: Push Frontend Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Start Application
         run: docker-compose up -d
       - name: Show project structure
