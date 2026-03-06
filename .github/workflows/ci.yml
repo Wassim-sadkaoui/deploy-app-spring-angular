@@ -25,16 +25,16 @@ jobs:
         run: mvn -B package --file springboot/app/pom.xml
 
       - name: Build Backend Image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend ./springboot/app
+        run: docker build -t spring-app ./springboot/app
 
       - name: Build Frontend Image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend ./angular-app
+        run: docker build -t angular-app ./angular-app
 
       - name: Push Backend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
 
       - name: Push Frontend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/angular-app
 
       - name: Install Docker Compose
         run: |
