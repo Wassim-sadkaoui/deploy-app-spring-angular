@@ -49,8 +49,7 @@ jobs:
 
       - name: Start Application
         run: docker-compose up -d
-      - name: Show project structure
-        run: ls -R
-
+      - name: Show running containers
+        run: docker ps
 
 
