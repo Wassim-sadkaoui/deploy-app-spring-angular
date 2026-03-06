@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Spring Boot
-        run: mvn -B package --file springboot/pom.xml
+        run: mvn -B package --file springboot/app/pom.xml
 
       - name: Build Backend Image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend ./springboot/app
