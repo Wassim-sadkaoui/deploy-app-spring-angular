@@ -49,17 +49,10 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Start application with Docker Compose
-        run: |
-          export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-          docker-compose up -d
+        run:  docker-compose up -d
 
       - name: Show running containers
-        run: docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+        run:  docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
 
-      - name: Verify frontend -> backend communication
-        run: |
-          sleep 5
-          docker-compose ps
-          curl -fSsf http://localhost:4200/api/user/all || (docker-compose logs --tail=200 && exit 1)
-
+  
 

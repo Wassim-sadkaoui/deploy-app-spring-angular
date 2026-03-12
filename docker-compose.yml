@@ -1,11 +1,11 @@
 version: "3.3"
 services:
   angular-app:
-    image: ${DOCKERHUB_USERNAME}/angular-app:latest
+    image: wassimsad/angular-app:latest
     ports:
       - "127.0.0.1:4200:80"
   spring-boot-app:
-    image: ${DOCKERHUB_USERNAME}/spring-app:latest
+    image: wassimsad/spring-app:latest
     ports:
       - "127.0.0.1:8081:8081"
     environment:
