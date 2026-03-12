@@ -1,13 +1,13 @@
 version: "3.3"
 services:
   angular-app:
-    image: wassimsad/angular-app:latest
+    build: wassimsad/angular-app:latest
     ports:
-      - "0.0.0.0:4200:80"      
+      - "127.0.0.1:4200:80"
   spring-boot-app:
-    image: wassimsad/spring-app:latest
+    build: wassimsad/spring-app:latest
     ports:
-      - "0.0.0.0:8081:8081"
+      - "127.0.0.1:8081:8081"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/demo
       - SPRING_DATASOURCE_USERNAME=root
@@ -29,7 +29,7 @@ services:
       MYSQL_ROOT_USERNAME: 'root'
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
-      - '0.0.0.0:3306:3306'
+      - '127.0.0.1:3306:3306'
     volumes:
       - demo:/var/lib/mysql
 volumes:

@@ -7,49 +7,55 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
+      - name: Set up Java 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Build Spring Boot JAR
+        run: mvn -B -DskipTests package --file springboot/app/pom.xml
+
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Spring Boot
-        run: mvn -B package --file springboot/app/pom.xml
-
-      - name: Build Backend Image
-        run: docker build -t spring-app ./springboot/app --no-cache
-
-      - name: Tag Backend Image
-        run: docker tag spring-app ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest
-
-      - name: Build Frontend Image
-        run: docker build -t angular-app ./angular-app --no-cache
-
-      - name: Tag Frontend Image
-        run: docker tag angular-app ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
-
-      - name: Push Backend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
-
-      - name: Push Frontend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/angular-app
-
-      - name: Install Docker Compose
+      - name: Build backend image
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest ./springboot/app
 
-      - name: Start Application
-        run: docker-compose up -d
+      - name: Push backend image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest
+
+      - name: Build frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest ./angular-app
+
+      - name: Push frontend image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
+
+      - name: Start application with Docker Compose
+        uses: docker/compose-action@v2
+        with:
+          files: docker-compose.yml
+          run: up -d
+
       - name: Show running containers
-        run: docker ps
+        run: docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+
+      - name: Verify frontend -> backend communication
+        run: |
+          sleep 5
+          docker compose ps
+          curl -fSsf http://localhost:4200/api/user/all || (docker compose logs --tail=200 && exit 1)
 
 

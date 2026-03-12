@@ -8,7 +8,9 @@ import { User } from '../models/User';
   
 export class UserService {
 
-  baseURL:string="http://localhost:8081/user";
+  // Use a relative path so the frontend talks to the same origin.
+  // Nginx (in production) or the dev proxy will forward /api to the backend.
+  baseURL:string="/api/user";
   constructor(private  httpClient:HttpClient) { }
 
   getAllUsers():Observable<any>{
