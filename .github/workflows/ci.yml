@@ -43,14 +43,14 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
 
-      - name: Install Docker Compose plugin
+      - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
+          sudo apt-get install -y docker-compose
 
       - name: Start application with Docker Compose
         run: |
-          docker compose up -d
+          docker-compose up -d
 
       - name: Show running containers
         run: docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
@@ -58,7 +58,7 @@ jobs:
       - name: Verify frontend -> backend communication
         run: |
           sleep 5
-          docker compose ps
-          curl -fSsf http://localhost:4200/api/user/all || (docker compose logs --tail=200 && exit 1)
+          docker-compose ps
+          curl -fSsf http://localhost:4200/api/user/all || (docker-compose logs --tail=200 && exit 1)
 
 
