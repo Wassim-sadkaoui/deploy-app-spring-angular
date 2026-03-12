@@ -3,11 +3,11 @@ services:
   angular-app:
     image: wassimsad/angular-app:latest
     ports:
-      - "127.0.0.1:4200:80"
-  spring-boot-app:
+      - "4200:80"
+  spring-app:
     image: wassimsad/spring-app:latest
     ports:
-      - "127.0.0.1:8081:8081"
+      - "8081:8081"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/demo
       - SPRING_DATASOURCE_USERNAME=root
